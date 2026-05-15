@@ -86,6 +86,13 @@
 			const minutes = ('0' + today.getMinutes()).slice(-2);
 			return hours + ':' + minutes;
 		}
+		/* 細川巽 – Task.25 –*/
+		const isNotEnter = /*[[${isNotEnter}]]*/ false;
+		window.addEventListener('DOMContentLoaded', function(){
+			if(isNotEnter){
+				alert("過去日の勤怠に未入力があります。");
+			}
+		});
 	</script>
 
 </body>

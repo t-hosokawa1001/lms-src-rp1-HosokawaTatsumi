@@ -334,4 +334,25 @@ public class StudentAttendanceService {
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
 	}
 
+	/**
+	 * 過去日の未入力チェック
+	 * @author 細川巽 - Task.25
+	 * @return 未入力の有無
+	 * @throws ParseException
+	 */
+	public Boolean notEnterCheck() throws ParseException {
+		// 未入力の有無
+		Boolean isNotEnter = false;
+		// 本日の研修日
+		Date trainingDate = attendanceUtil.getTrainingDate();
+		// 未入力の件数を取得
+		Integer notEnterCount = tStudentAttendanceMapper.notEnterCount(
+				loginUserDto.getLmsUserId(), Constants.DB_FLG_FALSE, trainingDate);
+		// 未入力の有無の判定
+		if (notEnterCount > 0) {
+			isNotEnter = true;
+		}
+
+		return isNotEnter;
+	}
 }
