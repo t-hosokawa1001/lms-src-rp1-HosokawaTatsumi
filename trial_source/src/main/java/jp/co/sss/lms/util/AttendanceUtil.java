@@ -131,6 +131,62 @@ public class AttendanceUtil {
 		}
 		return map;
 	}
+	
+	/**
+	 * 時間マップ取得
+	 * @author 細川巽 - Task.26
+	 * @return 時間の数値マップ
+	 */
+	public LinkedHashMap<Integer, String> setHourMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null, "");
+		for (int i = 0; i < 24; i++) {
+			map.put(i, String.format("%02d", i));
+		}
+		return map;
+	}
+	
+	/**
+	 * 分マップ取得
+	 * @author 細川巽 - Task.26
+	 * @return 分の数値マップ
+	 */
+	public LinkedHashMap<Integer, String> setMinuteMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		map.put(null, "");
+		for (int i = 0; i < 60; i++) {
+			map.put(i, String.format("%02d", i));
+		}
+		return map;
+	}
+	
+	/**
+	 * 時間(時)の切り出し
+	 * @author 細川巽 - Task.26
+	 * @param trainingTime
+	 * @return 切り出した時間(時)
+	 */
+	public Integer getHour(String trainingTime) {
+		Integer hour = null;
+		if (trainingTime != null && !trainingTime.equals("")) {
+			hour = Integer.parseInt(trainingTime.substring(0, 2));
+		}
+		return hour;
+	}
+	
+	/**
+	 * 時間(分)の切り出し
+	 * @author 細川巽 - Task.26
+	 * @param trainingTime
+	 * @return 切り出した時間(分)
+	 */
+	public Integer getMinute(String trainingTime) {
+		Integer minute = null;
+		if (trainingTime != null && !trainingTime.equals("")) {
+			minute = Integer.parseInt(trainingTime.substring(3, 5));
+		}
+		return minute;
+	}
 
 	/**
 	 * 研修日の判定

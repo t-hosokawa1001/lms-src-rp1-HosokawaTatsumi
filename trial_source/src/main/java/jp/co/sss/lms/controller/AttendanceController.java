@@ -137,6 +137,9 @@ public class AttendanceController {
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
 
+		// 細川巽 - Task.25
+		// 入力された出勤日を変換
+		studentAttendanceService.formatConversion(attendanceForm);
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
 		model.addAttribute("message", message);
