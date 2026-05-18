@@ -87,9 +87,9 @@
 			return hours + ':' + minutes;
 		}
 		/* 細川巽 – Task.25 –*/
-		const isNotEnter = /*[[${isNotEnter}]]*/ false;
+		const notEnterFlg = /*[[${notEnterFlg}]]*/ false;
 		window.addEventListener('DOMContentLoaded', function(){
-			if(isNotEnter){
+			if(notEnterFlg){
 				alert("過去日の勤怠に未入力があります。");
 			}
 		});

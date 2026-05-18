@@ -48,8 +48,8 @@ public class AttendanceController {
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 		// 細川巽 - Task.25
 		// 未入力の有無を取得
-		Boolean isNotEnter = studentAttendanceService.notEnterCheck();
-		model.addAttribute("isNotEnter", isNotEnter);
+		Boolean notEnterFlg = studentAttendanceService.notEnterCheck();
+		model.addAttribute("notEnterFlg", notEnterFlg);
 
 		return "attendance/detail";
 	}

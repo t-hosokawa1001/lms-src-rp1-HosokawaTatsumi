@@ -356,7 +356,7 @@ public class StudentAttendanceService {
 	 */
 	public Boolean notEnterCheck() throws ParseException {
 		// 未入力の有無
-		Boolean isNotEnter = false;
+		Boolean notEnterFlg = false;
 		// 本日の研修日
 		Date trainingDate = attendanceUtil.getTrainingDate();
 		// 未入力の件数を取得
@@ -364,10 +364,10 @@ public class StudentAttendanceService {
 				loginUserDto.getLmsUserId(), Constants.DB_FLG_FALSE, trainingDate);
 		// 未入力の有無の判定
 		if (notEnterCount > 0) {
-			isNotEnter = true;
+			notEnterFlg = true;
 		}
 
-		return isNotEnter;
+		return notEnterFlg;
 	}
 
 	/**
