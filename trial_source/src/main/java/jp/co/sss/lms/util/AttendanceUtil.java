@@ -202,5 +202,29 @@ public class AttendanceUtil {
 		}
 		return false;
 	}
+	
+	/**
+	 * 受講時間数を算出
+	 * @author 細川巽 - Task.27
+	 * @param startTime
+	 * @param endTime
+	 * @return	受講トータル時間
+	 */
+	public TrainingTime calcJukoTime(TrainingTime startTime, TrainingTime endTime) {
+		return endTime.subtract(startTime);
+	}
+	
+	/**
+	 * 中抜け時間(文字列)を数字に変換
+	 * @author 細川巽 - Task.27
+	 * @param blankTime
+	 * @return 中抜け時間
+	 */
+	public Integer reverseBlankTime(String blankTime) {
+		String[] parts = blankTime.split(":");
+	    int hours = Integer.parseInt(parts[0]);
+	    int minutes = Integer.parseInt(parts[1]);
+	    return hours * 60 + minutes;
+	}
 
 }
