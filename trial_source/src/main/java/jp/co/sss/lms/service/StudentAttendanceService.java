@@ -8,7 +8,10 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
+import io.micrometer.common.util.StringUtils;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.entity.TStudentAttendance;
@@ -388,6 +391,95 @@ public class StudentAttendanceService {
 				TrainingTime trainingEndTime = new TrainingTime(form.getTrainingEndTimeHour(),
 						form.getTrainingEndTimeMinute());
 				form.setTrainingEndTime(trainingEndTime.getFormattedString());
+			}
+		}
+	}
+
+	/**
+	 * 勤怠入力チェック
+	 * @author 細川巽 - Task.27
+	 * @param attendanceForm
+	 * @param bindingResult
+	 */
+	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
+		for (int i = 0; i < attendanceForm.getAttendanceList().size(); i++) {
+			// 入力フォーム
+			DailyAttendanceForm form = attendanceForm.getAttendanceList().get(i);
+			// 備考が100文字を超えているか
+			if (form.getNote().length() > 100) {
+				String fieldName = "attendanceList[" + i + "].note";
+				String message = messageUtil.getMessage(Constants.VALID_KEY_MAXLENGTH, new String[]{ "備考", "100" });
+				FieldError error = new FieldError(result.getObjectName(), fieldName, message);
+				result.addError(error);
+			}
+			// 出勤時間の時分が片方だけ入力されているか
+			if (form.getTrainingStartTimeHour() == null && form.getTrainingStartTimeMinute() != null) {
+				String fieldName = "attendanceList[" + i + "].trainingStartTimeHour";
+				String message = messageUtil.getMessage(Constants.INPUT_INVALID, new String[]{ "出勤時間" });
+				FieldError error = new FieldError(result.getObjectName(), fieldName, message);
+				result.addError(error);
+			}
+			if (form.getTrainingStartTimeHour() != null && form.getTrainingStartTimeMinute() == null) {
+				String fieldName = "attendanceList[" + i + "].trainingStartTimeMinute";
+				String message = messageUtil.getMessage(Constants.INPUT_INVALID, new String[]{ "出勤時間" });
+				FieldError error = new FieldError(result.getObjectName(), fieldName, message);
+				result.addError(error);
+			}
+			// 退勤時間の時分が片方だけ入力されているか
+			if (form.getTrainingEndTimeHour() == null && form.getTrainingEndTimeMinute() != null) {
+				String fieldName = "attendanceList[" + i + "].trainingEndTimeHour";
+				String message = messageUtil.getMessage(Constants.INPUT_INVALID, new String[]{ "退勤時間" });
+				FieldError error = new FieldError(result.getObjectName(), fieldName, message);
+				result.addError(error);
+			}
+			if (form.getTrainingEndTimeHour() != null && form.getTrainingEndTimeMinute() == null) {
+				String fieldName = "attendanceList[" + i + "].trainingEndTimeMinute";
+				String message = messageUtil.getMessage(Constants.INPUT_INVALID, new String[]{ "退勤時間" });
+				FieldError error = new FieldError(result.getObjectName(), fieldName, message);
+				result.addError(error);
+			}
+			// 出勤時間に入力なしで退勤時間に入力があるか
+			if ((form.getTrainingStartTime() == null || form.getTrainingStartTime().equals(""))
+					&& !(form.getTrainingEndTime() == null || form.getTrainingEndTime().equals(""))) {
+				String fieldNameHour = "attendanceList[" + i + "].trainingStartTimeHour";
+				String fieldNameMinute = "attendanceList[" + i + "].trainingStartTimeMinute";
+				String message = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY);
+				FieldError errorHour = new FieldError(result.getObjectName(), fieldNameHour, message);
+				FieldError errorMinute = new FieldError(result.getObjectName(), fieldNameMinute, "");
+				result.addError(errorHour);
+				result.addError(errorMinute);
+			}
+			// エラーがある場合はスキップ
+			if (result.hasErrors()){
+				continue;
+			}
+			TrainingTime trainingStartTime = new TrainingTime(form.getTrainingStartTime());
+			TrainingTime trainingEndTime = new TrainingTime(form.getTrainingEndTime());
+			// 出勤時間＞退勤時間になっているか
+			if (!StringUtils.isBlank(form.getTrainingEndTime()) && trainingStartTime.compareTo(trainingEndTime) > 0) {
+				String fieldNameHour = "attendanceList[" + i + "].trainingEndTimeHour";
+				String fieldNameMinute = "attendanceList[" + i + "].trainingEndTimeMinute";
+				String message = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, new String[]{ String.valueOf(i) });
+				FieldError errorHour = new FieldError(result.getObjectName(), fieldNameHour, message);
+				FieldError errorMinute = new FieldError(result.getObjectName(), fieldNameMinute, "");
+				result.addError(errorHour);
+				result.addError(errorMinute);
+				
+				continue;
+			} 
+			// 中抜け時間が入力されているか
+			if (form.getBlankTime() != null && !StringUtils.isBlank(form.getTrainingStartTime()) && !StringUtils.isBlank(form.getTrainingEndTime())) {
+				// 勤務時間を数値で作成
+				TrainingTime jukoTime = attendanceUtil.calcJukoTime(trainingStartTime, trainingEndTime);
+				Integer jukoTimeInt = attendanceUtil.reverseBlankTime(jukoTime.toString());
+				// 中抜け時間が勤務時間を超過しているか
+				if (form.getBlankTime() > jukoTimeInt) {
+					String fieldName = "attendanceList[" + i + "].blankTime";
+					String message = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_BLANKTIMEERROR);
+					FieldError error = new FieldError(result.getObjectName(), fieldName, message);
+					result.addError(error);
+				}
+				
 			}
 		}
 	}
