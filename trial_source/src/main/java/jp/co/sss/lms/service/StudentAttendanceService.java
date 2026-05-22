@@ -468,7 +468,12 @@ public class StudentAttendanceService {
 				continue;
 			} 
 			// 中抜け時間が入力されているか
-			if (form.getBlankTime() != null && !StringUtils.isBlank(form.getTrainingStartTime()) && !StringUtils.isBlank(form.getTrainingEndTime())) {
+			if (form.getBlankTime() != null) {
+				// 空文字によるエラー対策
+				if (StringUtils.isBlank(form.getTrainingStartTime()) || StringUtils.isBlank(form.getTrainingEndTime())) {
+					trainingStartTime = new TrainingTime(0, 0);
+					trainingEndTime = new TrainingTime(0, 0);
+				}
 				// 勤務時間を数値で作成
 				TrainingTime jukoTime = attendanceUtil.calcJukoTime(trainingStartTime, trainingEndTime);
 				Integer jukoTimeInt = attendanceUtil.reverseBlankTime(jukoTime.toString());
