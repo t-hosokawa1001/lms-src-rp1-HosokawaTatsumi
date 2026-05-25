@@ -22,8 +22,8 @@
 		<div class="bs-component col-sm-12">
 			<!-- 細川巽 - Task.27 -->
 			<ul style="list-style: none;">
-				<li th:each="error : ${#fields.detailedErrors()}">
-					<span th:if="${!#strings.isEmpty(error.message)}" class="help-inline error">*&nbsp;[[${error.message}]]</span>
+				<li th:each="message : ${#sets.toSet(#fields.detailedErrors().![message])}" >
+					<span th:if="${!#strings.isEmpty(message)}" class="help-inline error">*&nbsp;[[${message}]]</span>
 				</li>
 		    </ul>
 
