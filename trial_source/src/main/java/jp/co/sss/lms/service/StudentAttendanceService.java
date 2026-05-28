@@ -400,8 +400,9 @@ public class StudentAttendanceService {
 	 * @author 細川巽 - Task.27
 	 * @param attendanceForm
 	 * @param bindingResult
+	 * @throws ParseException
 	 */
-	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) {
+	public void updateInputCheck(AttendanceForm attendanceForm, BindingResult result) throws ParseException {
 		for (int i = 0; i < attendanceForm.getAttendanceList().size(); i++) {
 			// 入力フォーム
 			DailyAttendanceForm form = attendanceForm.getAttendanceList().get(i);
@@ -459,7 +460,8 @@ public class StudentAttendanceService {
 			if (!StringUtils.isBlank(form.getTrainingEndTime()) && trainingStartTime.compareTo(trainingEndTime) > 0) {
 				String fieldNameHour = "attendanceList[" + i + "].trainingEndTimeHour";
 				String fieldNameMinute = "attendanceList[" + i + "].trainingEndTimeMinute";
-				String message = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, new String[]{ String.valueOf(i) });
+				String message = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE,
+						new String[]{ String.valueOf(i) });
 				FieldError errorHour = new FieldError(result.getObjectName(), fieldNameHour, message);
 				FieldError errorMinute = new FieldError(result.getObjectName(), fieldNameMinute, "");
 				result.addError(errorHour);
@@ -484,7 +486,6 @@ public class StudentAttendanceService {
 					FieldError error = new FieldError(result.getObjectName(), fieldName, message);
 					result.addError(error);
 				}
-				
 			}
 		}
 	}

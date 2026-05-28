@@ -59,27 +59,31 @@
 								<td class="w60"><input type="button" class="btn btn-success" value="定時" th:onclick="|registFixedTime(${stat.index})|" /></td>
 								<!-- 細川巽 - Task.26 --> <!-- 細川巽 - Task.27 --> <!-- 細川巽 - Task.28 -->
 								<td class="w70">
-									<select th:id="|start-hour-${stat.index}|" th:name="|attendanceList[${stat.index}].trainingStartTimeHour|" class="form-control" th:errorclass="errorInput">
+									<select th:id="|start-hour-${stat.index}|" th:name="|attendanceList[${stat.index}].trainingStartTimeHour|" 
+										class="form-control" th:errorclass="errorInput">
 										<option th:each="HourMap : ${attendanceForm.HourMap}" th:value="${HourMap.key}" th:inlne="text" class="form-control" 
 											th:selected="${HourMap.key == dailyAttendanceForm.trainingStartTimeHour}">[[${HourMap.value}]]</option>
 									</select>
 								</td>
 								<td>:</td>
 								<td class="w70">
-									<select th:id="|start-minute-${stat.index}|" th:name="|attendanceList[${stat.index}].trainingStartTimeMinute|" class="form-control" th:errorclass="errorInput">
+									<select th:id="|start-minute-${stat.index}|" th:name="|attendanceList[${stat.index}].trainingStartTimeMinute|" 
+										class="form-control" th:errorclass="errorInput">
 										<option th:each="MinuteMap : ${attendanceForm.MinuteMap}" th:value="${MinuteMap.key}" th:inlne="text" class="form-control" 
 											th:selected="${MinuteMap.key == dailyAttendanceForm.trainingStartTimeMinute}">[[${MinuteMap.value}]]</option>
 									</select>
 								</td>
 								<td class="w70">
-									<select th:id="|end-hour-${stat.index}|" th:name="|attendanceList[${stat.index}].trainingEndTimeHour|" class="form-control" th:errorclass="errorInput">
+									<select th:id="|end-hour-${stat.index}|" th:name="|attendanceList[${stat.index}].trainingEndTimeHour|" 
+										class="form-control" th:errorclass="errorInput">
 										<option th:each="HourMap : ${attendanceForm.HourMap}" th:value="${HourMap.key}" th:inlne="text" class="form-control" 
 											th:selected="${HourMap.key == dailyAttendanceForm.trainingEndTimeHour}">[[${HourMap.value}]]</option>
 									</select>
 								</td>
 								<td>:</td>
 								<td class="w70">
-									<select th:id="|end-minute-${stat.index}|" th:name="|attendanceList[${stat.index}].trainingEndTimeMinute|" class="form-control" th:errorclass="errorInput">
+									<select th:id="|end-minute-${stat.index}|" th:name="|attendanceList[${stat.index}].trainingEndTimeMinute|" 
+										class="form-control" th:errorclass="errorInput">
 										<option th:each="MinuteMap : ${attendanceForm.MinuteMap}" th:value="${MinuteMap.key}" th:inlne="text" class="form-control" 
 											th:selected="${MinuteMap.key == dailyAttendanceForm.trainingEndTimeMinute}">[[${MinuteMap.value}]]</option>
 									</select>
